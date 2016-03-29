@@ -50,16 +50,22 @@ public class complaintfragment extends Fragment{
         switch (position){
             case 1:
                 listofcomp = new ArrayList<>();
-                String url = "http://192.168.202.1:80/my_api/complaints/hostel";
+                String url = "http://192.168.201.1:80/my_api/complaints/hostel";
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
                         try {
                             JSONObject jsonObject = new JSONObject(s);
-                            JSONArray jsonArray = jsonObject.getJSONArray("complaints");
-                            for(int i=0;i<jsonArray.length();i++){
-                                JSONObject j = jsonArray.getJSONObject(i);
-                                listofcomp.add(new complaint(1,j.getString("complaint_id"),j.getString("title"),j.getString("time"),Integer.parseInt(j.getString("upvote").toString())));
+                            int success = jsonObject.getInt("success");
+                            if(success==1){
+                                JSONArray jsonArray = jsonObject.getJSONArray("complaints");
+                                for(int i=0;i<jsonArray.length();i++){
+                                    JSONObject j = jsonArray.getJSONObject(i);
+                                    listofcomp.add(new complaint(i,j.getString("complaint_id"),j.getString("title"),j.getString("time"),Integer.parseInt(j.getString("upvote").toString())));
+                                }
+                            }
+                            else {
+                                Toast.makeText(getContext(),jsonObject.getString("message"),Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -76,18 +82,23 @@ public class complaintfragment extends Fragment{
                 break;
             case 2:
                 listofcomp = new ArrayList<>();
-                String url1 = "http://192.168.202.1:80/my_api/complaints/institute";
+                String url1 = "http://192.168.201.1:80/my_api/complaints/institute";
                 StringRequest stringRequest1 = new StringRequest(Request.Method.GET, url1, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
-
                         Toast.makeText(getContext(),s, Toast.LENGTH_LONG).show();
                         try {
                             JSONObject jsonObject = new JSONObject(s);
-                            JSONArray jsonArray = jsonObject.getJSONArray("complaints");
-                            for(int i=0;i<jsonArray.length();i++){
-                                JSONObject j = jsonArray.getJSONObject(i);
-                                listofcomp.add(new complaint(1,j.getString("complaint_id"),j.getString("title"),j.getString("time"),Integer.parseInt(j.getString("upvote").toString())));
+                            int success = jsonObject.getInt("success");
+                            if(success==1){
+                                JSONArray jsonArray = jsonObject.getJSONArray("complaints");
+                                for(int i=0;i<jsonArray.length();i++){
+                                    JSONObject j = jsonArray.getJSONObject(i);
+                                    listofcomp.add(new complaint(i,j.getString("complaint_id"),j.getString("title"),j.getString("time"),Integer.parseInt(j.getString("upvote").toString())));
+                                }
+                            }
+                            else {
+                                Toast.makeText(getContext(),jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -104,16 +115,54 @@ public class complaintfragment extends Fragment{
                 break;
             case 3:
                 listofcomp = new ArrayList<>();
-                String url2 = "http://192.168.202.1:80/my_api/complaints/all";
+                String url2 = "http://192.168.201.1:80/my_api/complaints/personal";
                 StringRequest stringRequest2 = new StringRequest(Request.Method.GET, url2, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
                         try {
                             JSONObject jsonObject = new JSONObject(s);
-                            JSONArray jsonArray = jsonObject.getJSONArray("complaints");
-                            for(int i=0;i<jsonArray.length();i++){
-                                JSONObject j = jsonArray.getJSONObject(i);
-                                listofcomp.add(new complaint(1,j.getString("complaint_id"),j.getString("title"),j.getString("time"),Integer.parseInt(j.getString("upvote").toString())));
+                            int success = jsonObject.getInt("success");
+                            if(success==1){
+                                JSONArray jsonArray = jsonObject.getJSONArray("complaints");
+                                for(int i=0;i<jsonArray.length();i++){
+                                    JSONObject j = jsonArray.getJSONObject(i);
+                                    listofcomp.add(new complaint(i,j.getString("complaint_id"),j.getString("title"),j.getString("time"),Integer.parseInt(j.getString("upvote").toString())));
+                                }
+                            }
+                            else {
+                                Toast.makeText(getContext(),jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Toast.makeText(getContext(), "pvolley error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                RequestQueue requestQueue2= Volley.newRequestQueue(getContext());
+                requestQueue2.add(stringRequest2);
+                break;
+            case 4:
+                listofcomp = new ArrayList<>();
+                String url3 = "http://192.168.201.1:80/my_api/complaints/notifications";
+                StringRequest stringRequest3 = new StringRequest(Request.Method.GET, url3, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(s);
+                            int success = jsonObject.getInt("success");
+                            if(success==1){
+                                JSONArray jsonArray = jsonObject.getJSONArray("notifications");
+                                for(int i=0;i<jsonArray.length();i++){
+                                    JSONObject j = jsonArray.getJSONObject(i);
+                                    listofcomp.add(new complaint(i,j.getString("complaint_id"),j.getString("title"),j.getString("time"),Integer.parseInt(j.getString("upvote").toString())));
+                                }
+                            }
+                            else {
+                                Toast.makeText(getContext(),jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -125,14 +174,8 @@ public class complaintfragment extends Fragment{
                         Toast.makeText(getContext(), "pppppp", Toast.LENGTH_SHORT).show();
                     }
                 });
-                RequestQueue requestQueue2= Volley.newRequestQueue(getContext());
-                requestQueue2.add(stringRequest2);
-                break;
-            case 4:
-                listofcomp = new ArrayList<>();
-                listofcomp.add(new complaint(1,"COMPLAINT ID","COMPLAINT TITLE","14:32:00",12));
-                listofcomp.add(new complaint(2,"complaint3 can be much longer than this if it is a string","This is the complaint title for this complaint","14:22:00",9));
-                listofcomp.add(new complaint(3,"COMPLAINT ID","COMPLAINT TITLE","14:20:00",23));
+                RequestQueue requestQueue3= Volley.newRequestQueue(getContext());
+                requestQueue3.add(stringRequest3);
                 break;
         }
         if(sortType==1){

@@ -16,8 +16,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,10 +42,13 @@ public class ComposeComplaint extends AppCompatActivity {
     private EditText cmpCdesc;
     private Button cmpsubmit;
     private Button takephoto;
-    private RadioButton type;
+    private RadioGroup type;
     private ImageView mImageView;
     private Spinner Hostel;
     private Spinner auth;
+
+    String techi;
+    String complaintType;
 
     private String[] hostels;
     private String[] technicians;
@@ -52,10 +66,41 @@ public class ComposeComplaint extends AppCompatActivity {
         cmpCtitle = (EditText) findViewById(R.id.cmpCtitle);
         cmpsubmit = (Button) findViewById(R.id.cmpsubmit);
         takephoto = (Button) findViewById(R.id.takephoto);
-        type = (RadioButton) findViewById(R.id.cmpCtype1);
+        type = (RadioGroup) findViewById(R.id.cmpCtype);
         Hostel = (Spinner) findViewById(R.id.cmpChostel);
         mImageView = (ImageView) findViewById(R.id.cmpCImage);
         auth = (Spinner) findViewById(R.id.technician);
+
+        switch (auth.getSelectedItem().toString()){
+            case "Electrician":
+                techi="tech_1";
+                break;
+            case "Plumber":
+                techi="tech_2";
+                break;
+            case "Sanitation":
+                techi="tech_3";
+                break;
+            case "LAN":
+                techi="tech_4";
+                break;
+            case "Carpenter":
+                techi="tech_5";
+                break;
+        }
+
+        String complaintTypes = ((RadioButton) findViewById(type.getCheckedRadioButtonId())).getText().toString();
+        switch (complaintTypes){
+            case "Personal":
+                complaintType = "0";
+                break;
+            case "Hostel":
+                complaintType = "1";
+                break;
+            case "Institute":
+                complaintType = "2";
+                break;
+        }
 
         takephoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,10 +109,35 @@ public class ComposeComplaint extends AppCompatActivity {
             }
         });
 
-        cmpCtitle.setOnClickListener(new View.OnClickListener() {
+        cmpsubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "complaint posted online", Toast.LENGTH_SHORT).show();
+                String url = "http://192.168.201.1:80/my_api/complaints/ccomplaint?description="+cmpCdesc.getText().toString()
+                        +"&title"+cmpCtitle.getText().toString()+"&complaint_type"+complaintType+"&tech_id"+techi+"&image=null";
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(s);
+                            if(jsonObject.getInt("success")==1){
+                                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                startActivity(intent);
+                            }
+                            else {
+                                Toast.makeText(ComposeComplaint.this,"complaint not posted try again", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Toast.makeText(ComposeComplaint.this,"volley error compose", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                requestQueue.add(stringRequest);
             }
         });
 

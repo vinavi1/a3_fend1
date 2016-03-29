@@ -13,6 +13,7 @@ public class complaint{
     private int id;
     private String complaintid;
     private String complaintTitle;
+    private String time;
     private int votes;
 
     public int getVotes() {
@@ -23,7 +24,7 @@ public class complaint{
         this.votes = votes;
     }
 
-    private String time;
+
 
     public int getId() {
         return id;

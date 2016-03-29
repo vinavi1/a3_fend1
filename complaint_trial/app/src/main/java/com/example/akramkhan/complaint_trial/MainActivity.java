@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent2);*/
                 return true;
             case R.id.logout:
-                String url = "http://192.168.202.1:80/my_api/home/logout";
+                String url = "http://192.168.201.1:80/my_api/home/logout";
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     return "Institute";
                 case 2:
-                    return "All";
+                    return "Personal";
                 case 3:
                     return "Notifications";
             }

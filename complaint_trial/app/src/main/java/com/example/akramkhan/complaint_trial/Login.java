@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://192.168.202.1:80/my_api/home/login?user_id=" + userid.getText().toString() + "&password=" + password.getText().toString();
+                String url = "http://192.168.201.1:80/my_api/home/login?user_id="+ userid.getText().toString() + "&password=" + password.getText().toString();
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
@@ -51,18 +51,23 @@ public class Login extends AppCompatActivity {
                                 switch (usertype){
                                     case "0":
                                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                        intent.putExtra("userid",usertype);
+                                        intent.putExtra("user_type",usertype);
                                         startActivity(intent);
                                         break;
                                     case "1":
                                         Intent intent1 = new Intent(getApplicationContext(), WardenMain.class);
-                                        intent1.putExtra("userid", usertype);
+                                        intent1.putExtra("user_type", usertype);
                                         startActivity(intent1);
                                         break;
                                     case "2":
                                         Intent intent2 = new Intent(getApplicationContext(), WardenMain.class);
-                                        intent2.putExtra("userid",usertype);
+                                        intent2.putExtra("user_type",usertype);
                                         startActivity(intent2);
+                                        break;
+                                    case "3":
+                                        Intent intent3 = new Intent(getApplicationContext(), WardenMain.class);
+                                        intent3.putExtra("user_type",usertype);
+                                        startActivity(intent3);
                                         break;
                                 }
                             } else {
@@ -76,7 +81,7 @@ public class Login extends AppCompatActivity {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), "Volley error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Volley error11", Toast.LENGTH_SHORT).show();
                     }
                 });
 

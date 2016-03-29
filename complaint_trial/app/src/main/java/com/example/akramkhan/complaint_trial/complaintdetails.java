@@ -59,7 +59,7 @@ public class complaintdetails extends AppCompatActivity {
 
 
 
-        String url="http://192.168.202.1:80/my_api/complaints/complaint?complaint_id="+intent.getStringExtra("complaintid");
+        String url="http://192.168.201.1:80/my_api/complaints/complaint?complaint_id="+intent.getStringExtra("complaintid");
         StringRequest stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -108,12 +108,12 @@ public class complaintdetails extends AppCompatActivity {
                 redundant.setVisibility(View.GONE);
                 Notify.setVisibility(View.GONE);
                 break;
-            case "1":
+            case "2":
                 upvote.setVisibility(View.GONE);
                 downvote.setVisibility(View.GONE);
                 redundant.setVisibility(View.GONE);
                 break;
-            case "2":
+            case "1":
                 Notify.setVisibility(View.GONE);
                 upvote.setVisibility(View.GONE);
                 downvote.setVisibility(View.GONE);
@@ -124,10 +124,37 @@ public class complaintdetails extends AppCompatActivity {
         Resolved.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Resolved", Toast.LENGTH_SHORT).show();
+                if (cmpDstatus.getText().toString().matches("2")) {
+                    Toast.makeText(complaintdetails.this,"This is complaint has already been resolved", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    String url = "http://192.168.201.1:80/my_api/status/resolve?complaint_id" + cmpDid.getText().toString();
+                    StringRequest stringRequest1 = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String s) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(s);
+                                int success = jsonObject.getInt("success");
+                                if (success == 1) {
+                                    Toast.makeText(complaintdetails.this, "complaint resolved", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(complaintdetails.this, "cannot resolve the complaint", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            Toast.makeText(complaintdetails.this, "volley error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                    requestQueue1.add(stringRequest1);
+                }
             }
         });
-
         upvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,7 +181,38 @@ public class complaintdetails extends AppCompatActivity {
         redundant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "marked as redundant", Toast.LENGTH_SHORT).show();
+                if (cmpDstatus.getText().toString().matches("1")) {
+                    Toast.makeText(complaintdetails.this,"This is already marked as redundant", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (cmpDstatus.getText().toString().matches("2")) {
+                        Toast.makeText(complaintdetails.this, "This has been resolved", Toast.LENGTH_SHORT).show();
+                    } else {
+                        String url = "http://192.168.201.1:80/my_api/status/redundant?complaint_id" + cmpDid.getText().toString();
+                        StringRequest stringRequest1 = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String s) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(s);
+                                    int success = jsonObject.getInt("success");
+                                    if (success == 1) {
+                                        Toast.makeText(complaintdetails.this, "complaint resolved", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(complaintdetails.this, "cannot resolve the complaint", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                Toast.makeText(complaintdetails.this, "volley error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                        requestQueue1.add(stringRequest1);
+                    }
+                }
             }
         });
 

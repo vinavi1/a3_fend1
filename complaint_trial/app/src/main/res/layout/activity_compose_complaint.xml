@@ -38,6 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <RadioGroup
+        android:id="@+id/cmpCtype"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <RadioButton
@@ -53,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <RadioButton
+            android:id="@+id/cmpCtype3"
             android:textSize="18dp"
             android:text="Institute"
             android:layout_width="wrap_content"
