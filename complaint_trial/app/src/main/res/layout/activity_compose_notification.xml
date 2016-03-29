@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.akramkhan.complaint_trial.ComposeNotification">
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/NotifiTitle"
+        android:text="Complaint Title"
+        android:textSize="25dp"
+        android:padding="10dp"/>
+    <TextView
+        android:textSize="18dp"
+        android:gravity="right"
+        android:id="@+id/NotifiId"
+        android:text="Complaint Id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:textSize="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/NotifiDesc"
+        android:text="Complaint description"/>
+    <EditText
+        android:id="@+id/Notifidetails"
+        android:layout_margin="10dp"
+        android:textSize="20dp"
+        android:padding="10dp"
+        android:hint="Notification details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/NotifiPost"
+        android:text="POST"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
